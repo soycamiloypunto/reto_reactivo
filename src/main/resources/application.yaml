@@ -55,7 +55,7 @@ resilience4j.circuitbreaker:
       permitted-number-of-calls-in-half-open-state: 2
       automatic-transition-from-open-to-half-open-enabled: false
       record-exceptions: java.util.concurrent.TimeoutException
-      ignore-exceptions: com.example.resilient_api.domain.exceptions.BusinessException
+      ignore-exceptions: com.pragma.tecnologia.domain.exceptions.BusinessException
 resilience4j:
   retry:
     configs:
@@ -83,3 +83,11 @@ resilience4j:
       emailValidatorBulkhead:
         maxConcurrentCalls: 5
         maxWaitDuration: 1s
+spring:
+  sql:
+    init:
+      mode: always
+  r2dbc:
+    url: r2dbc:mysql://localhost:3306/bd_tecnologia?allowPublicKeyRetrieval=true&useSSL=false
+    username: root
+    password: root

@@ -22,25 +22,37 @@ ext {
 }
 
 dependencies {
-	implementation 'org.springframework.boot:spring-boot-starter-actuator'
-	implementation 'org.springframework.boot:spring-boot-starter-data-r2dbc'
-	implementation 'org.springframework.boot:spring-boot-starter-webflux'
-	implementation 'io.micrometer:micrometer-tracing-bridge-brave'
-	implementation 'io.github.resilience4j:resilience4j-spring-boot2:2.2.0'
-	implementation 'io.github.resilience4j:resilience4j-reactor:2.2.0'
-	implementation 'io.github.resilience4j:resilience4j-retry'
-	implementation 'io.github.resilience4j:resilience4j-bulkhead'
-	implementation 'org.springframework.boot:spring-boot-starter-aop'
-	implementation 'org.postgresql:r2dbc-postgresql'
-	implementation 'org.mapstruct:mapstruct:1.5.3.Final'
-	annotationProcessor 'org.mapstruct:mapstruct-processor:1.5.3.Final'
-	compileOnly 'org.projectlombok:lombok:1.18.24'
-	annotationProcessor 'org.projectlombok:lombok:1.18.24'
-	runtimeOnly 'io.micrometer:micrometer-registry-prometheus'
-	testImplementation 'org.springframework.boot:spring-boot-starter-test'
-	testImplementation 'io.projectreactor:reactor-test'
-	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+    implementation 'org.springframework.boot:spring-boot-starter-actuator'
 
+    // 1. DESCOMENTAR: Necesario para que funcionen los Repositorios
+    implementation 'org.springframework.boot:spring-boot-starter-data-r2dbc'
+
+    // 2. CAMBIAR: Driver reactivo válido para MySQL
+    implementation 'com.github.jasync-sql:jasync-r2dbc-mysql:2.2.4'
+    runtimeOnly 'com.mysql:mysql-connector-j'
+
+    implementation 'org.springframework.boot:spring-boot-starter-webflux'
+    implementation 'io.micrometer:micrometer-tracing-bridge-brave'
+
+    // 3. ACTUALIZAR: Debe ser spring-boot3 para tu versión 3.3.6
+    implementation 'io.github.resilience4j:resilience4j-spring-boot3:2.2.0'
+    implementation 'io.github.resilience4j:resilience4j-reactor:2.2.0'
+
+    implementation 'io.github.resilience4j:resilience4j-retry'
+    implementation 'io.github.resilience4j:resilience4j-bulkhead'
+    implementation 'org.springframework.boot:spring-boot-starter-aop'
+
+    implementation 'org.mapstruct:mapstruct:1.5.3.Final'
+    annotationProcessor 'org.mapstruct:mapstruct-processor:1.5.3.Final'
+    compileOnly 'org.projectlombok:lombok:1.18.24'
+    annotationProcessor 'org.projectlombok:lombok:1.18.24'
+
+    runtimeOnly 'io.micrometer:micrometer-registry-prometheus'
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    testImplementation 'io.projectreactor:reactor-test'
+    testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+
+    implementation 'org.springframework.boot:spring-boot-starter-validation'
 }
 
 dependencyManagement {
