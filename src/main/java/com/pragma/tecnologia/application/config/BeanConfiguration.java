@@ -36,9 +36,16 @@ public class BeanConfiguration {
     @Bean
     public IBootcampServicePort bootcampServicePort(
             IBootcampPersistencePort bootcampPersistencePort,
-            IReportePersistencePort reportePersistencePort // Nuevo
+            IReportePersistencePort reportePersistencePort,
+            IMatriculaPersistencePort matriculaPersistencePort,
+            IUsuarioGatewayPort usuarioGatewayPort
     ) {
-        return new BootcampUseCase(bootcampPersistencePort, reportePersistencePort);
+        return new BootcampUseCase(
+                bootcampPersistencePort,
+                reportePersistencePort,
+                matriculaPersistencePort,
+                usuarioGatewayPort
+        );
     }
 
 }

@@ -9,4 +9,5 @@ public interface IBootcampPersistencePort {
     Flux<Bootcamp> listarBootcamps(int page, int size, String sortField, String direction);
     Mono<Void> eliminarBootcamp(Long bootcampId);//HU6
     Mono<Bootcamp> obtenerBootcampPorId(Long id);//HU7
+    Mono<Bootcamp> obtenerBootcampCompleto(Long id);//HU8
 }

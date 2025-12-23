@@ -126,6 +126,15 @@ public class BootcampPersistenceAdapter implements IBootcampPersistencePort {
                 .map(IBootcampEntityMapper::toDomainSimple);
     }
 
+    //HU8
+    @Override
+    public Mono<Bootcamp> obtenerBootcampCompleto(Long id) {
+        return IBootcampRepository.findById(id)
+                .flatMap(bootcampEntity -> cargarCapacidadesConTecnologias(bootcampEntity.getId())
+                        .collectList()
+                        .map(caps -> IBootcampEntityMapper.toDomainWithCapacities(bootcampEntity, caps))
+                );
+    }
 }
 
 

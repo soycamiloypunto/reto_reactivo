@@ -9,4 +9,7 @@ public interface IMatriculaPersistencePort {
     Mono<Void> guardarMatricula(Matricula matricula);
     Mono<Long> contarMatriculasUsuario(Long idUsuario);
     Flux<Bootcamp> obtenerBootcampsInscritos(Long idUsuario);
+    //HU8
+    Mono<Long> obtenerBootcampIdMasInscritos();
+    Flux<Long> obtenerIdsUsuariosInscritos(Long bootcampId);
 }

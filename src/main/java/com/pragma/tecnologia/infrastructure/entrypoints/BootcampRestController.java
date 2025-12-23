@@ -1,6 +1,7 @@
 package com.pragma.tecnologia.infrastructure.entrypoints;
 
 import com.pragma.tecnologia.domain.api.IBootcampServicePort;
+import com.pragma.tecnologia.infrastructure.entrypoints.dto.BootcampExitosoResponse;
 import com.pragma.tecnologia.infrastructure.entrypoints.dto.BootcampRequest;
 import com.pragma.tecnologia.infrastructure.entrypoints.dto.BootcampResponse;
 import com.pragma.tecnologia.infrastructure.entrypoints.mapper.IBootcampMapper;
@@ -41,5 +42,11 @@ public class BootcampRestController {
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public Mono<Void> eliminar(@PathVariable Long id) {
         return bootcampServicePort.eliminarBootcamp(id);
+    }
+
+    //HU8
+    @GetMapping("/mas-inscritos")
+    public Mono<BootcampExitosoResponse> obtenerBootcampMasInscritos() {
+        return bootcampServicePort.obtenerBootcampMasExitoso();
     }
 }

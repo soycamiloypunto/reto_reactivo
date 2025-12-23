@@ -38,4 +38,14 @@ public class MatriculaPersistenceAdapter implements IMatriculaPersistencePort {
         return matriculaRepository.findAllBootcampsByUsuarioId(idUsuario)
                 .map(bootcampEntityMapper::toDomainSimple);
     }
+
+    @Override
+    public Mono<Long> obtenerBootcampIdMasInscritos() {
+        return matriculaRepository.findBootcampIdMasInscritos();
+    }
+
+    @Override
+    public Flux<Long> obtenerIdsUsuariosInscritos(Long bootcampId) {
+        return matriculaRepository.findUsuariosInscritos(bootcampId);
+    }
 }
