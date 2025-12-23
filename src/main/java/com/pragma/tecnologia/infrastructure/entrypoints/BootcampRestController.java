@@ -35,4 +35,11 @@ public class BootcampRestController {
         return bootcampServicePort.listarBootcamps(page, size, sortField, direction)
                 .map(iBootcampResponseMapper::toResponse);
     }
+
+    //HU6
+    @DeleteMapping("/{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public Mono<Void> eliminar(@PathVariable Long id) {
+        return bootcampServicePort.eliminarBootcamp(id);
+    }
 }

@@ -7,4 +7,5 @@ import reactor.core.publisher.Mono;
 public interface IBootcampPersistencePort {
     Mono<Void> guardarBootcamp(Bootcamp bootcamp);
     Flux<Bootcamp> listarBootcamps(int page, int size, String sortField, String direction);
+    Mono<Void> eliminarBootcamp(Long bootcampId);//HU6
 }

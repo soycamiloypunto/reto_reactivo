@@ -27,4 +27,10 @@ public class BootcampUseCase implements IBootcampServicePort {
         }
         return bootcampPersistencePort.listarBootcamps(page, size, sortField, direction);
     }
+
+    //HU6
+    @Override
+    public Mono<Void> eliminarBootcamp(Long bootcampId) {
+        return bootcampPersistencePort.eliminarBootcamp(bootcampId);
+    }
 }

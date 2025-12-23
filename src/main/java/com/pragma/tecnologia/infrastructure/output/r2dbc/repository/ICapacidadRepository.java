@@ -24,4 +24,8 @@ public interface ICapacidadRepository extends R2dbcRepository<CapacidadEntity, L
             "INNER JOIN bootcamp_capacidad bc ON c.id = bc.capacidad_id " +
             "WHERE bc.bootcamp_id = :bootcampId")
     Flux<CapacidadEntity> findAllByBootcampId(Long bootcampId);
+
+    //HU6
+    @Query("SELECT COUNT(*) FROM bootcamp_capacidad WHERE capacidad_id = :id")
+    Mono<Long> countBootcampsByCapacidadId(Long id);
 }

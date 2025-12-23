@@ -6,5 +6,15 @@ import org.mapstruct.Mapper;
 
 @Mapper(componentModel = "spring")
 public interface ITecnologiaEntityMapper {
-    Tecnologia toDomain(TecnologiaEntity entity);
+    TecnologiaEntity toEntity(Tecnologia tecnologia);
+
+    // Método default para evitar ambigüedad de constructores
+    default Tecnologia toDomain(TecnologiaEntity entity) {
+        if (entity == null) return null;
+        return new Tecnologia(
+                entity.getId(),
+                entity.getNombre(),
+                entity.getDescripcion()
+        );
+    }
 }

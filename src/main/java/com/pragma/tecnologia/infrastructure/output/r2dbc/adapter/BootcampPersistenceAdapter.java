@@ -5,15 +5,15 @@ import com.pragma.tecnologia.domain.model.Capacidad;
 import com.pragma.tecnologia.domain.spi.IBootcampPersistencePort;
 import com.pragma.tecnologia.domain.spi.ICapacidadPersistencePort;
 import com.pragma.tecnologia.infrastructure.output.r2dbc.entity.BootcampCapacidadEntity;
+import com.pragma.tecnologia.infrastructure.output.r2dbc.entity.CapacidadEntity;
+import com.pragma.tecnologia.infrastructure.output.r2dbc.entity.TecnologiaEntity;
 import com.pragma.tecnologia.infrastructure.output.r2dbc.mapper.IBootcampEntityMapper;
 import com.pragma.tecnologia.infrastructure.output.r2dbc.mapper.ICapacidadEntityMapper;
 import com.pragma.tecnologia.infrastructure.output.r2dbc.mapper.ITecnologiaEntityMapper;
-import com.pragma.tecnologia.infrastructure.output.r2dbc.repository.IBootcampCapacidadRepository;
-import com.pragma.tecnologia.infrastructure.output.r2dbc.repository.IBootcampRepository;
-import com.pragma.tecnologia.infrastructure.output.r2dbc.repository.ICapacidadRepository;
-import com.pragma.tecnologia.infrastructure.output.r2dbc.repository.ITecnologiaRepository;
+import com.pragma.tecnologia.infrastructure.output.r2dbc.repository.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
@@ -22,7 +22,8 @@ import reactor.core.publisher.Mono;
 public class BootcampPersistenceAdapter implements IBootcampPersistencePort {
     private final IBootcampRepository IBootcampRepository;
     private final IBootcampEntityMapper IBootcampEntityMapper;
-    private final IBootcampCapacidadRepository relacionRepository;
+    private final IBootcampCapacidadRepository iBootcampCapacidadRepository;
+    private final ICapacidadTecnologiaRepository icapacidadTecnologiaRepository;
     private final ICapacidadRepository iCapacidadRepository;
     private final ICapacidadEntityMapper iCapacidadEntityMapper;
     private final ITecnologiaRepository iTecnologiaRepository;
@@ -33,7 +34,7 @@ public class BootcampPersistenceAdapter implements IBootcampPersistencePort {
         return IBootcampRepository.save(IBootcampEntityMapper.toEntity(bootcamp))
                 .flatMapMany(savedBootcamp -> Flux.fromIterable(bootcamp.getCapacidades())
                         .map(cap -> new BootcampCapacidadEntity(null, savedBootcamp.getId(), cap.getId())))
-                .flatMap(relacionRepository::save)
+                .flatMap(iBootcampCapacidadRepository::save)
                 .then();
     }
 
@@ -66,6 +67,52 @@ public class BootcampPersistenceAdapter implements IBootcampPersistencePort {
                                 .collectList()
                                 .map(techs -> iCapacidadEntityMapper.toDomainWithTechs(capEntity, techs))
                 );
+    }
+
+
+    //HU6
+    @Override
+    @Transactional
+    public Mono<Void> eliminarBootcamp(Long bootcampId) {
+        return iCapacidadRepository.findAllByBootcampId(bootcampId)
+                .collectList()
+                .flatMap(capacidades ->
+                        // 1. Borrar relación intermedia
+                        iBootcampCapacidadRepository.deleteAllByBootcampId(bootcampId)
+                                // 2. Borrar Bootcamp padre
+                                .then(IBootcampRepository.deleteById(bootcampId))
+                                // 3. CAMBIO: usar concatMap para procesar uno por uno sin solapar conexiones
+                                .thenMany(Flux.fromIterable(capacidades))
+                                .concatMap(this::eliminarCapacidadSiEsHuerfana)
+                                .then()
+                );
+    }
+
+    private Mono<Void> eliminarCapacidadSiEsHuerfana(CapacidadEntity cap) {
+        return iCapacidadRepository.countBootcampsByCapacidadId(cap.getId())
+                .flatMap(count -> {
+                    if (count == 0) {
+                        return iTecnologiaRepository.findAllByCapacidadId(cap.getId())
+                                .collectList()
+                                .flatMap(tecs ->
+                                        icapacidadTecnologiaRepository.deleteAllByCapacidadId(cap.getId())
+                                                .then(iCapacidadRepository.deleteById(cap.getId()))
+                                                // CAMBIO: usar concatMap aquí también
+                                                .thenMany(Flux.fromIterable(tecs))
+                                                .concatMap(this::eliminarTecnologiaSiEsHuerfana)
+                                                .then()
+                                );
+                    }
+                    return Mono.empty();
+                });
+    }
+
+    private Mono<Void> eliminarTecnologiaSiEsHuerfana(TecnologiaEntity tech) {
+        return iTecnologiaRepository.countCapacidadesByTecnologiaId(tech.getId())
+                .flatMap(count -> {
+                    if (count == 0) return iTecnologiaRepository.deleteById(tech.getId());
+                    return Mono.empty();
+                });
     }
 
 }

@@ -28,7 +28,7 @@ public interface ICapacidadMapper {
     default List<Tecnologia> mapIdsToTecnologias(List<Long> ids) {
         if (ids == null) return Collections.emptyList();
         return ids.stream()
-                .map(Tecnologia::new) // Asegúrate de tener public Tecnologia(Long id) en el dominio
+                .map(Tecnologia::new)
                 .toList();
     }
 

@@ -7,11 +7,15 @@ import org.springframework.data.repository.reactive.ReactiveCrudRepository;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
-public interface ITecnologiaRepository extends ReactiveCrudRepository<Tecnologia, Long> {
+public interface ITecnologiaRepository extends ReactiveCrudRepository<TecnologiaEntity, Long> {
     Mono<Boolean> existsByNombre(String nombre);
 
     @Query("SELECT t.* FROM tecnologia t " +
-            "JOIN capacidad_tecnologia ct ON t.id = ct.tecnologia_id " +
+            "INNER JOIN capacidad_tecnologia ct ON t.id = ct.tecnologia_id " +
             "WHERE ct.capacidad_id = :capacidadId")
     Flux<TecnologiaEntity> findAllByCapacidadId(Long capacidadId);
+
+    //HU6
+    @Query("SELECT COUNT(*) FROM capacidad_tecnologia WHERE tecnologia_id = :id")
+    Mono<Long> countCapacidadesByTecnologiaId(Long id);
 }
