@@ -10,9 +10,24 @@ import java.util.List;
 
 @Mapper(componentModel = "spring")
 public interface ICapacidadEntityMapper {
-    CapacidadEntity toEntity(Capacidad capacidad);
-    Capacidad toDomain(CapacidadEntity entity);
 
-    @Mapping(target = "tecnologias", source = "tecnologias")
-    Capacidad toDomainWithTechs(CapacidadEntity entity, List<Tecnologia> tecnologias);
+    @Mapping(target = "id", ignore = true)
+    CapacidadEntity toEntity(Capacidad capacidad);
+
+    // Implementación default para evitar ambigüedad en toDomain
+    default Capacidad toDomain(CapacidadEntity entity) {
+        if (entity == null) return null;
+        return new Capacidad(entity.getId()); // Usa el constructor de referencia
+    }
+
+    // Mapeo detallado con el constructor completo
+    default Capacidad toDomainWithTechs(CapacidadEntity entity, List<Tecnologia> tecnologias) {
+        if (entity == null) return null;
+        return new Capacidad(
+                entity.getId(),
+                entity.getNombre(),
+                entity.getDescripcion(),
+                tecnologias
+        );
+    }
 }

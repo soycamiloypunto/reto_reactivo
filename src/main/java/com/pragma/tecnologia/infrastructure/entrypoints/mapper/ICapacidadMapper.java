@@ -13,19 +13,27 @@ import java.util.List;
 @Mapper(componentModel = "spring")
 public interface ICapacidadMapper {
 
-    @Mapping(target = "tecnologias", source = "tecnologiasIds")
-    Capacidad toDomain(CapacidadRequest request);
+    // CAMBIO: Se usa un método default para elegir el constructor de 4 argumentos
+    default Capacidad toDomain(CapacidadRequest request) {
+        if (request == null) return null;
+
+        return new Capacidad(
+                null, // ID nulo para creación
+                request.getNombre(),
+                request.getDescripcion(),
+                mapIdsToTecnologias(request.getTecnologiasIds())
+        );
+    }
 
     default List<Tecnologia> mapIdsToTecnologias(List<Long> ids) {
         if (ids == null) return Collections.emptyList();
         return ids.stream()
-                .map(id -> new Tecnologia(id)) // Llama al constructor de solo ID
+                .map(Tecnologia::new) // Asegúrate de tener public Tecnologia(Long id) en el dominio
                 .toList();
     }
 
     @Mapping(target = "tecnologias", source = "tecnologias")
     CapacidadResponse toResponse(Capacidad capacidad);
 
-    // Mapeo automático para la lista simplificada dentro del record
     CapacidadResponse.TecnologiaSimplificada map(Tecnologia tecnologia);
 }

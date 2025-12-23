@@ -19,4 +19,9 @@ public interface ICapacidadRepository extends R2dbcRepository<CapacidadEntity, L
             "CASE WHEN :sortField = 'tecnologias' AND :direction = 'desc' THEN COUNT(ct.tecnologia_id) END DESC " +
             "LIMIT :size OFFSET :offset")
     Flux<CapacidadEntity> findAllCustom(String sortField, String direction, int size, int offset);
+
+    @Query("SELECT c.* FROM capacidad c " +
+            "INNER JOIN bootcamp_capacidad bc ON c.id = bc.capacidad_id " +
+            "WHERE bc.bootcamp_id = :bootcampId")
+    Flux<CapacidadEntity> findAllByBootcampId(Long bootcampId);
 }
