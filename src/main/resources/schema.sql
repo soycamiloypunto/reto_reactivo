@@ -35,3 +35,10 @@ CREATE TABLE IF NOT EXISTS bootcamp_capacidad (
     FOREIGN KEY (bootcamp_id) REFERENCES bootcamp(id),
     FOREIGN KEY (capacidad_id) REFERENCES capacidad(id)
 );
+
+CREATE TABLE IF NOT EXISTS matricula (
+    id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    id_usuario BIGINT NOT NULL,
+    id_bootcamp BIGINT NOT NULL,
+    FOREIGN KEY (id_bootcamp) REFERENCES bootcamp(id)
+);

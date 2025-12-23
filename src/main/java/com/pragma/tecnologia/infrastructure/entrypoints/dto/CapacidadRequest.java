@@ -12,6 +12,8 @@ import java.util.List;
 @Data
 @AllArgsConstructor
 public class CapacidadRequest {
+    private Long id;
+
     private String nombre;
     private String descripcion;
     private List<Long> tecnologiasIds;

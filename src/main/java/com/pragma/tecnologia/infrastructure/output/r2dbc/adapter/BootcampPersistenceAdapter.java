@@ -30,12 +30,17 @@ public class BootcampPersistenceAdapter implements IBootcampPersistencePort {
     private final ITecnologiaEntityMapper iTecnologiaEntityMapper;
 
     @Override
-    public Mono<Void> guardarBootcamp(Bootcamp bootcamp) {
+    public Mono<Bootcamp> guardarBootcamp(Bootcamp bootcamp) { // Cambio a Mono<Bootcamp>
         return IBootcampRepository.save(IBootcampEntityMapper.toEntity(bootcamp))
-                .flatMapMany(savedBootcamp -> Flux.fromIterable(bootcamp.getCapacidades())
-                        .map(cap -> new BootcampCapacidadEntity(null, savedBootcamp.getId(), cap.getId())))
-                .flatMap(iBootcampCapacidadRepository::save)
-                .then();
+                .flatMap(savedBootcampEntity -> {
+                    // Guardamos relaciones intermedias
+                    return Flux.fromIterable(bootcamp.getCapacidades())
+                            .map(cap -> new BootcampCapacidadEntity(null, savedBootcampEntity.getId(), cap.getId()))
+                            .flatMap(iBootcampCapacidadRepository::save)
+                            .then(Mono.just(savedBootcampEntity)); // Retornamos la entidad guardada al flujo
+                })
+                // Convertimos de vuelta a Dominio para tener el ID
+                .map(entity -> IBootcampEntityMapper.toDomainWithCapacities(entity, bootcamp.getCapacidades()));
     }
 
     @Override
@@ -113,6 +118,12 @@ public class BootcampPersistenceAdapter implements IBootcampPersistencePort {
                     if (count == 0) return iTecnologiaRepository.deleteById(tech.getId());
                     return Mono.empty();
                 });
+    }
+
+    @Override
+    public Mono<Bootcamp> obtenerBootcampPorId(Long id) {
+        return IBootcampRepository.findById(id)
+                .map(IBootcampEntityMapper::toDomainSimple);
     }
 
 }

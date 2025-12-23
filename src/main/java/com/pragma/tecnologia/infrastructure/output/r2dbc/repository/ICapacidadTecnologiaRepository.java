@@ -9,5 +9,5 @@ public interface ICapacidadTecnologiaRepository extends R2dbcRepository<Capacida
     // Busca todas las relaciones vinculadas a una capacidad específica
     Flux<CapacidadTecnologiaEntity> findAllByCapacidadId(Long capacidadId);
     Mono<Void> deleteAllByCapacidadId(Long capacidadId);
-
+    Mono<Long> countByCapacidadId(Long capacidadId);
 }
