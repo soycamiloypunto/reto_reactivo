@@ -26,9 +26,6 @@ public class CapacidadRestController {
 
     @PostMapping
     public Mono<ResponseEntity<Void>> registrar(@Valid @RequestBody CapacidadRequest request) {
-        // ESTA LÍNEA ES PARA DEBUG: Mira la consola de IntelliJ al hacer el POST
-        System.out.println("LOG: Recibido nombre -> " + request.getNombre());
-
         return iCapacidadServicePort.registrarCapacidad(capacidadMapper.toDomain(request))
                 .thenReturn(new ResponseEntity<>(HttpStatus.CREATED));
     }

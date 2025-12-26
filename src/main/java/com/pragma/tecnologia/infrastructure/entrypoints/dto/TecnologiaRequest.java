@@ -1,5 +1,6 @@
 package com.pragma.tecnologia.infrastructure.entrypoints.dto;
 
+//DTO Tecnologia
 public class TecnologiaRequest {
     private String nombre;
     private String descripcion;

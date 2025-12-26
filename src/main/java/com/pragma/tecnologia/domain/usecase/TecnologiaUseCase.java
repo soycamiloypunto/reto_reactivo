@@ -14,6 +14,7 @@ public class TecnologiaUseCase implements ITecnologiaServicePort {
         this.tecnologiaPersistencePort = tecnologiaPersistencePort;
     }
 
+    //HU1
     @Override
     public Mono<Void> registrarTecnologia(Tecnologia tecnologia) {
         return tecnologiaPersistencePort.existePorNombre(tecnologia.getNombre())

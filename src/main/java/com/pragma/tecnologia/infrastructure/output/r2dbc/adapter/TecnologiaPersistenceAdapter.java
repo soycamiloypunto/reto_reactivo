@@ -12,11 +12,8 @@ import reactor.core.publisher.Mono;
 @RequiredArgsConstructor // 2. Genera el constructor para todos los campos 'final'
 public class TecnologiaPersistenceAdapter implements ITecnologiaPersistencePort {
 
-    // 3. Declarar solo una vez cada dependencia
     private final ITecnologiaRepository iTecnologiaRepository;
     private final ITecnologiaEntityMapper iTecnologiaEntityMapper;
-
-    // ELIMINADO: El constructor manual ya no es necesario gracias a @RequiredArgsConstructor
 
     @Override
     public Mono<Tecnologia> guardar(Tecnologia tecnologia) {

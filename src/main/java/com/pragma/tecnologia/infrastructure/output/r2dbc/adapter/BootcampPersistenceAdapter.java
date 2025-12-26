@@ -3,7 +3,6 @@ package com.pragma.tecnologia.infrastructure.output.r2dbc.adapter;
 import com.pragma.tecnologia.domain.model.Bootcamp;
 import com.pragma.tecnologia.domain.model.Capacidad;
 import com.pragma.tecnologia.domain.spi.IBootcampPersistencePort;
-import com.pragma.tecnologia.domain.spi.ICapacidadPersistencePort;
 import com.pragma.tecnologia.infrastructure.output.r2dbc.entity.BootcampCapacidadEntity;
 import com.pragma.tecnologia.infrastructure.output.r2dbc.entity.CapacidadEntity;
 import com.pragma.tecnologia.infrastructure.output.r2dbc.entity.TecnologiaEntity;
@@ -29,8 +28,9 @@ public class BootcampPersistenceAdapter implements IBootcampPersistencePort {
     private final ITecnologiaRepository iTecnologiaRepository;
     private final ITecnologiaEntityMapper iTecnologiaEntityMapper;
 
+    //HU4
     @Override
-    public Mono<Bootcamp> guardarBootcamp(Bootcamp bootcamp) { // Cambio a Mono<Bootcamp>
+    public Mono<Bootcamp> guardarBootcamp(Bootcamp bootcamp) {
         return IBootcampRepository.save(IBootcampEntityMapper.toEntity(bootcamp))
                 .flatMap(savedBootcampEntity -> {
                     // Guardamos relaciones intermedias

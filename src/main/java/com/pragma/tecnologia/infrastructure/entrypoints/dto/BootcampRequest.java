@@ -6,8 +6,8 @@ import java.util.List;
 public class BootcampRequest {
     private String nombre;
     private String descripcion;
-    private LocalDate fechaLanzamiento; // NUEVO
-    private Integer duracion;           // NUEVO
+    private LocalDate fechaLanzamiento; // HU7
+    private Integer duracion;           // HU7
     private List<CapacidadRequest> capacidades; // Tu lista de capacidades
 
     // Getters y Setters

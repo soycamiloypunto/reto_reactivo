@@ -7,11 +7,11 @@ import org.mapstruct.Mapper;
 @Mapper(componentModel = "spring")
 public interface ITecnologiaRequestMapper {
 
-    // CAMBIO: Método default para resolver la ambigüedad manualmente
+    //default para corregir uso de getters
     default Tecnologia toDomain(TecnologiaRequest request) {
         if (request == null) return null;
 
-        // Llamamos al constructor de 3 argumentos (ID nulo al crear)
+        // Constructor de 3 argumentos (ID nulo al crear)
         return new Tecnologia(
                 null,
                 request.getNombre(),

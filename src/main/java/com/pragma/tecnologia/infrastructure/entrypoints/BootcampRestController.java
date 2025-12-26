@@ -20,6 +20,7 @@ public class BootcampRestController {
     private final IBootcampMapper bootcampMapper;
     private final IBootcampResponseMapper iBootcampResponseMapper;
 
+    //HU4
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public Mono<Void> registrar(@RequestBody BootcampRequest request) {

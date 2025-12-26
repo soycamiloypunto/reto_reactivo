@@ -20,6 +20,7 @@ public class TecnologiaRestController {
         this.tecnologiaRequestMapper = tecnologiaRequestMapper;
     }
 
+    //HU1
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public Mono<Void> registrar(@RequestBody TecnologiaRequest tecnologiaRequest) {
