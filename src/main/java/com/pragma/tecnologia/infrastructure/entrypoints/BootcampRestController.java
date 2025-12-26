@@ -45,7 +45,7 @@ public class BootcampRestController {
         return bootcampServicePort.eliminarBootcamp(id);
     }
 
-    //HU8
+    //HU9
     @GetMapping("/mas-inscritos")
     public Mono<BootcampExitosoResponse> obtenerBootcampMasInscritos() {
         return bootcampServicePort.obtenerBootcampMasExitoso();
