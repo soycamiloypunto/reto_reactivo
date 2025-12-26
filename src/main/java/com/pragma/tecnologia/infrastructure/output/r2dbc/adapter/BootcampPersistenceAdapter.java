@@ -43,6 +43,7 @@ public class BootcampPersistenceAdapter implements IBootcampPersistencePort {
                 .map(entity -> IBootcampEntityMapper.toDomainWithCapacities(entity, bootcamp.getCapacidades()));
     }
 
+    //HU5
     @Override
     public Flux<Bootcamp> listarBootcamps(int page, int size, String sortField, String direction) {
         int offset = page * size;

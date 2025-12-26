@@ -13,13 +13,22 @@ public class Bootcamp {
     private final Integer duracion;
     private final List<Capacidad> capacidades;
 
-    // CONSTRUCTOR 1: El que ya tienes (Validación estricta para CREAR)
+    // CONSTRUCTOR 1 principal
     public Bootcamp(Long id, String nombre, String descripcion,
                     LocalDate fechaLanzamiento, Integer duracion,
                     List<Capacidad> capacidades) {
+
+        //Validar que se tenga entre 1 a 4 capacidades
         if (capacidades == null || capacidades.isEmpty() || capacidades.size() > 4) {
             throw new DomainException("Un bootcamp debe tener entre 1 y 4 capacidades.");
         }
+
+        //Fecha solo futuras.
+        // SOLO validar fecha futura si el ID es NULO (es decir, se está creando)
+        if (id == null && (fechaLanzamiento == null || fechaLanzamiento.isBefore(LocalDate.now()))) {
+            throw new DomainException("La fecha de lanzamiento debe ser futura");
+        }
+
         this.id = id;
         this.nombre = nombre;
         this.descripcion = descripcion;
@@ -28,8 +37,7 @@ public class Bootcamp {
         this.capacidades = capacidades;
     }
 
-    // --- AGREGAR ESTE NUEVO CONSTRUCTOR ---
-    // CONSTRUCTOR 2: Para VALIDACIONES (HU7).
+    // CONSTRUCTOR Para VALIDACIONES (HU7).
     // Inicializa la lista vacía pero NO lanza el error.
     public Bootcamp(Long id, String nombre, String descripcion,
                     LocalDate fechaLanzamiento, Integer duracion) {
