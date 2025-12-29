@@ -24,7 +24,6 @@ public class Bootcamp {
         }
 
         //Fecha solo futuras.
-        // SOLO validar fecha futura si el ID es NULO (es decir, se está creando)
         if (id == null && (fechaLanzamiento == null || fechaLanzamiento.isBefore(LocalDate.now()))) {
             throw new DomainException("La fecha de lanzamiento debe ser futura");
         }

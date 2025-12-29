@@ -6,6 +6,10 @@ import com.pragma.tecnologia.infrastructure.entrypoints.dto.BootcampRequest;
 import com.pragma.tecnologia.infrastructure.entrypoints.dto.BootcampResponse;
 import com.pragma.tecnologia.infrastructure.entrypoints.mapper.IBootcampMapper;
 import com.pragma.tecnologia.infrastructure.entrypoints.mapper.IBootcampResponseMapper;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -21,8 +25,13 @@ public class BootcampRestController {
     private final IBootcampResponseMapper iBootcampResponseMapper;
 
     //HU4
+    @Operation(summary = "Registrar un nuevo Bootcamp")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "201", description = "Bootcamp creado exitosamente", content = @Content),
+            @ApiResponse(responseCode = "400", description = "Datos inválidos o nombre repetido", content = @Content)
+    })
     @PostMapping
-    @ResponseStatus(HttpStatus.CREATED)
+    @ResponseStatus(HttpStatus.CREATED) //
     public Mono<Void> registrar(@RequestBody BootcampRequest request) {
         return bootcampServicePort.guardarBootcamp(bootcampMapper.toDomain(request));
     }

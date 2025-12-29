@@ -1,21 +1,15 @@
 package com.pragma.tecnologia;
 
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
 
+// Asegúrate de que TecnologiaApiApplication sea el nombre exacto de tu clase Main principal
 @SpringBootTest(classes = TecnologiaApiApplication.class)
 class ResilientApiApplicationTests {
 
-	@MockBean
-	private UserPersistencePort userPersistencePort;
-
-	@Autowired
-	private UserUseCase userUseCase;
-
-	@Test
-	void contextLoads() {
-	}
+    @Test
+    void contextLoads() {
+        // Esta prueba pasa exitosamente si la aplicación logra iniciar el contexto de Spring.
+    }
 
 }

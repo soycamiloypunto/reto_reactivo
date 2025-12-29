@@ -7,6 +7,4 @@ import org.mapstruct.Mapper;
 @Mapper(componentModel = "spring")
 public interface IBootcampResponseMapper {
     BootcampResponse toResponse(Bootcamp bootcamp);
-
-    // Mapstruct mapeará automáticamente las listas si los nombres coinciden
 }
