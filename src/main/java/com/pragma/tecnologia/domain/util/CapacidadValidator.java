@@ -10,15 +10,15 @@ import java.util.List;
 public class CapacidadValidator {
 
     public static void validar(Capacidad capacidad) {
-        if (capacidad.getNombre() == null || capacidad.getNombre().length() > 50) {
+        if (capacidad.getNombre() == null || capacidad.getNombre().length() > DomainConstants.MAX_NOMBRE_LENGTH) {
             throw new DomainException(DomainError.NOMBRE_LARGO);
         }
-        if (capacidad.getDescripcion() == null || capacidad.getDescripcion().length() > 90) {
+        if (capacidad.getDescripcion() == null || capacidad.getDescripcion().length() > DomainConstants.MAX_DESCRIPCION_LENGTH) {
             throw new DomainException(DomainError.DESCRIPCION_LARGO);
         }
 
         List<Tecnologia> tecs = capacidad.getTecnologias();
-        if (tecs == null || tecs.size() < 3 || tecs.size() > 20) {
+        if (tecs == null || tecs.size() < DomainConstants.MIN_TECNOLOGIAS_POR_CAPACIDAD || tecs.size() > DomainConstants.MAX_TECNOLOGIAS_POR_CAPACIDAD) {
             throw new DomainException(DomainError.CAPACIDAD_TECNOLOGIAS_MINIMO);
         }
 

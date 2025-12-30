@@ -18,7 +18,7 @@ public class BootcampValidator {
 
         // REGLA 1: Cantidad de Capacidades (1 a 4)
         List<Capacidad> caps = bootcamp.getCapacidades();
-        if (caps == null || caps.isEmpty() || caps.size() > 4) {
+        if (caps == null || caps.isEmpty() || caps.size() > DomainConstants.MIN_CAPACIDADES_POR_BOOTCAMP) {
             throw new DomainException(DomainError.BOOTCAMP_CAPACIDADES_RANGO);
         }
 

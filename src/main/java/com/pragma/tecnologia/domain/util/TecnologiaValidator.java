@@ -9,13 +9,13 @@ public class TecnologiaValidator {
         if (tecnologia.getNombre() == null || tecnologia.getNombre().trim().isEmpty()) {
             throw new DomainException(DomainError.NOMBRE_OBLIGATORIO);
         }
-        if (tecnologia.getNombre().length() > 50) {
+        if (tecnologia.getNombre().length() > DomainConstants.MAX_NOMBRE_LENGTH) {
             throw new DomainException(DomainError.NOMBRE_LARGO);
         }
         if (tecnologia.getDescripcion() == null || tecnologia.getDescripcion().trim().isEmpty()) {
             throw new DomainException(DomainError.DESCRIPCION_OBLIGATORIA);
         }
-        if (tecnologia.getDescripcion().length() > 90) {
+        if (tecnologia.getDescripcion().length() > DomainConstants.MAX_DESCRIPCION_LENGTH) {
             throw new DomainException(DomainError.DESCRIPCION_LARGO);
         }
     }
