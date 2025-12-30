@@ -21,7 +21,7 @@ import java.util.List;
 public class CapacidadPersistenceAdapter implements ICapacidadPersistencePort {
 
     private final ICapacidadRepository capacidadRepository;
-    private final ICapacidadTecnologiaRepository relacionRepository; // Inyectar nuevo repo
+    private final ICapacidadTecnologiaRepository relacionRepository; // Para borrar relaciones
     private final ICapacidadEntityMapper capacidadEntityMapper;
     private final ITecnologiaRepository iTecnologiaRepository;
     private final ITecnologiaEntityMapper iTecnologiaEntityMapper;
@@ -30,14 +30,12 @@ public class CapacidadPersistenceAdapter implements ICapacidadPersistencePort {
     public Mono<Capacidad> guardar(Capacidad capacidad) {
         return capacidadRepository.save(capacidadEntityMapper.toEntity(capacidad))
                 .flatMap(savedEntity -> {
-                    // 1. Creamos las entidades de relación usando el ID de la capacidad guardada
                     List<CapacidadTecnologiaEntity> relaciones = capacidad.getTecnologias().stream()
                             .map(tec -> new CapacidadTecnologiaEntity(savedEntity.getId(), tec.getId()))
                             .toList();
 
-                    // 2. Guardamos todas las relaciones y al final devolvemos el dominio original
                     return relacionRepository.saveAll(relaciones)
-                            .then(Mono.just(capacidad)); // Retornamos el objeto original que SI tiene las tecnologías
+                            .then(Mono.just(capacidad));
                 });
     }
 
@@ -53,11 +51,32 @@ public class CapacidadPersistenceAdapter implements ICapacidadPersistencePort {
                 .flatMap(entity ->
                         iTecnologiaRepository.findAllByCapacidadId(entity.getId())
                                 .map(iTecnologiaEntityMapper::toDomain)
-                                .filter(t -> t.getId() != null) // <--- 1. FILTRO DE SEGURIDAD (Agrega esto)
-                                // referencia al ID para el distinct
-                                .distinct(Tecnologia::getId) // <--- 2. AHORA SÍ ES SEGURO
+                                .filter(t -> t.getId() != null)
+                                .distinct(Tecnologia::getId)
                                 .collectList()
                                 .map(techs -> capacidadEntityMapper.toDomainWithTechs(entity, techs))
                 );
+    }
+
+    // --- NUEVOS MÉTODOS PARA SOPORTAR HU6 (Eliminación en Cascada) ---
+    @Override
+    public Mono<Long> contarUsosEnBootcamps(Long capacidadId) {
+        // Cuenta en la tabla intermedia 'bootcamp_capacidad'
+        return capacidadRepository.countBootcampsByCapacidadId(capacidadId);
+    }
+
+    @Override
+    public Flux<Tecnologia> obtenerTecnologiasPorCapacidad(Long capacidadId) {
+        // Reutilizamos la lógica de búsqueda de tecnologías
+        return iTecnologiaRepository.findAllByCapacidadId(capacidadId)
+                .map(iTecnologiaEntityMapper::toDomain);
+    }
+
+    @Override
+    public Mono<Void> eliminarCapacidad(Long capacidadId) {
+        // 1. Borrar relaciones en 'capacidad_tecnologia'
+        return relacionRepository.deleteAllByCapacidadId(capacidadId)
+                // 2. Borrar la entidad 'capacidad'
+                .then(capacidadRepository.deleteById(capacidadId));
     }
 }

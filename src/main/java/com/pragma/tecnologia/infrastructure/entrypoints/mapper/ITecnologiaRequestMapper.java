@@ -7,13 +7,16 @@ import org.mapstruct.Mapper;
 @Mapper(componentModel = "spring")
 public interface ITecnologiaRequestMapper {
 
-    //default para corregir uso de getters
+    // Usamos 'default' para resolver la ambigüedad del constructor manualmente.
+    // Esto actúa como una "Factory" simple.
     default Tecnologia toDomain(TecnologiaRequest request) {
-        if (request == null) return null;
+        if (request == null) {
+            return null;
+        }
 
-        // Constructor de 3 argumentos (ID nulo al crear)
+        // Aquí elegimos explícitamente el constructor de 3 argumentos
         return new Tecnologia(
-                null,
+                null, // El ID es null porque es una creación
                 request.getNombre(),
                 request.getDescripcion()
         );

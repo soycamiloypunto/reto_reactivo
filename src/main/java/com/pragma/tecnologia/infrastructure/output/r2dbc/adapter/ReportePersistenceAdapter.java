@@ -45,4 +45,9 @@ public class ReportePersistenceAdapter implements IReportePersistencePort {
                 })
                 .then();
     }
+
+    @Override
+    public Mono<Void> incrementarInscritos(Long bootcampId) {
+        return reporteRepository.incrementarInscritos(bootcampId).then();
+    }
 }

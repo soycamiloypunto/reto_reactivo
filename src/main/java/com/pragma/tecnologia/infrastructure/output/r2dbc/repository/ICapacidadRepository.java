@@ -28,4 +28,6 @@ public interface ICapacidadRepository extends R2dbcRepository<CapacidadEntity, L
     //HU6
     @Query("SELECT COUNT(*) FROM bootcamp_capacidad WHERE capacidad_id = :id")
     Mono<Long> countBootcampsByCapacidadId(Long id);
+
+
 }

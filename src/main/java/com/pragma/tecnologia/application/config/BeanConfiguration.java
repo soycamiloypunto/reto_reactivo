@@ -28,9 +28,10 @@ public class BeanConfiguration {
     @Bean
     public IMatriculaServicePort matriculaServicePort(
             IMatriculaPersistencePort matriculaPersistencePort,
-            IBootcampPersistencePort bootcampPersistencePort // Inyectamos también el puerto de bootcamp
+            IBootcampPersistencePort bootcampPersistencePort,
+            IReportePersistencePort reportePersistencePort // Inyectamos también el puerto de bootcamp
     ) {
-        return new MatriculaUseCase(matriculaPersistencePort, bootcampPersistencePort);
+        return new MatriculaUseCase(matriculaPersistencePort, bootcampPersistencePort, reportePersistencePort);
     }
 
     @Bean

@@ -6,6 +6,7 @@ import com.pragma.tecnologia.infrastructure.output.r2dbc.entity.CapacidadEntity;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 
+import java.util.Collections;
 import java.util.List;
 
 @Mapper(componentModel = "spring")
@@ -28,6 +29,19 @@ public interface ICapacidadEntityMapper {
                 entity.getNombre(),
                 entity.getDescripcion(),
                 tecnologias
+        );
+    }
+
+    // Mapea solo los datos básicos de la entidad al dominio, con lista de tecnologías vacía.
+    default Capacidad toDomainSimple(CapacidadEntity entity) {
+        if (entity == null) {
+            return null;
+        }
+        return new Capacidad(
+                entity.getId(),
+                entity.getNombre(),
+                entity.getDescripcion(),
+                Collections.emptyList() // ¡Importante! Lista vacía segura
         );
     }
 }

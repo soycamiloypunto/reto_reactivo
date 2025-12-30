@@ -7,4 +7,6 @@ public interface ITecnologiaPersistencePort {
     //HU1
     Mono<Tecnologia> guardar(Tecnologia tecnologia);
     Mono<Boolean> existePorNombre(String nombre);
+    Mono<Long> contarUsosEnCapacidades(Long tecnologiaId);
+    Mono<Void> eliminarTecnologia(Long tecnologiaId);
 }

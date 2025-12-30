@@ -7,6 +7,7 @@ import com.pragma.tecnologia.domain.spi.IBootcampPersistencePort;
 import com.pragma.tecnologia.domain.spi.IMatriculaPersistencePort;
 import com.pragma.tecnologia.domain.spi.IReportePersistencePort;
 import com.pragma.tecnologia.domain.spi.IUsuarioGatewayPort;
+import com.pragma.tecnologia.domain.util.BootcampValidator;
 import com.pragma.tecnologia.infrastructure.entrypoints.dto.BootcampExitosoResponse;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
@@ -29,6 +30,10 @@ public class BootcampUseCase implements IBootcampServicePort {
 
     @Override
     public Mono<Void> guardarBootcamp(Bootcamp bootcamp) {
+        // 1. VALIDACIÓN DE DOMINIO (Clean Code)
+        BootcampValidator.validar(bootcamp);
+
+        // 2. PERSISTENCIA Y REPORTE
         return bootcampPersistencePort.guardarBootcamp(bootcamp)
                 .doOnSuccess(bootcampGuardado -> {
                     // FIRE AND FORGET: Disparamos el reporte sin bloquear el retorno

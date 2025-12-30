@@ -1,9 +1,8 @@
 package com.pragma.tecnologia.domain.model;
 
-import com.pragma.tecnologia.domain.exceptions.DomainException;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.ArrayList; // Necesario importar
 
 public class Bootcamp {
     private final Long id;
@@ -13,21 +12,10 @@ public class Bootcamp {
     private final Integer duracion;
     private final List<Capacidad> capacidades;
 
-    // CONSTRUCTOR 1 principal
+    // CONSTRUCTOR PRINCIPAL (Solo asignación)
     public Bootcamp(Long id, String nombre, String descripcion,
                     LocalDate fechaLanzamiento, Integer duracion,
                     List<Capacidad> capacidades) {
-
-        //Validar que se tenga entre 1 a 4 capacidades
-        if (capacidades == null || capacidades.isEmpty() || capacidades.size() > 4) {
-            throw new DomainException("Un bootcamp debe tener entre 1 y 4 capacidades.");
-        }
-
-        //Fecha solo futuras.
-        if (id == null && (fechaLanzamiento == null || fechaLanzamiento.isBefore(LocalDate.now()))) {
-            throw new DomainException("La fecha de lanzamiento debe ser futura");
-        }
-
         this.id = id;
         this.nombre = nombre;
         this.descripcion = descripcion;
@@ -36,20 +24,14 @@ public class Bootcamp {
         this.capacidades = capacidades;
     }
 
-    // CONSTRUCTOR Para VALIDACIONES (HU7).
-    // Inicializa la lista vacía pero NO lanza el error.
+    // CONSTRUCTOR AUXILIAR (Para lógica interna o tests si es necesario)
+    // Inicializa capacidades vacías para evitar NullPointer
     public Bootcamp(Long id, String nombre, String descripcion,
                     LocalDate fechaLanzamiento, Integer duracion) {
-        this.id = id;
-        this.nombre = nombre;
-        this.descripcion = descripcion;
-        this.fechaLanzamiento = fechaLanzamiento;
-        this.duracion = duracion;
-        this.capacidades = new ArrayList<>(); // Lista vacía segura, SIN VALIDACIÓN
+        this(id, nombre, descripcion, fechaLanzamiento, duracion, new ArrayList<>());
     }
-    // --------------------------------------
 
-    // Getters...
+    // Getters
     public Long getId() { return id; }
     public String getNombre() { return nombre; }
     public String getDescripcion() { return descripcion; }

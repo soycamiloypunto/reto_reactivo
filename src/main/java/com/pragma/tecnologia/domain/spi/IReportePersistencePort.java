@@ -6,4 +6,5 @@ import reactor.core.publisher.Mono;
 public interface IReportePersistencePort {
     // Recibe el bootcamp completo para extraer las métricas
     Mono<Void> guardarReporte(Bootcamp bootcamp);
+    Mono<Void> incrementarInscritos(Long bootcampId);
 }

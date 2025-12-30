@@ -80,48 +80,18 @@ public class BootcampPersistenceAdapter implements IBootcampPersistencePort {
     @Override
     @Transactional
     public Mono<Void> eliminarBootcamp(Long bootcampId) {
+        // Solo borramos la relación directa y el Bootcamp.
+        // La lógica de "qué pasa con las capacidades" se movió al UseCase.
+        return iBootcampCapacidadRepository.deleteAllByBootcampId(bootcampId)
+                .then(IBootcampRepository.deleteById(bootcampId));
+    }
+
+    // Puedes reusar 'obtenerBootcampCompleto' o crear uno ligero:
+    public Flux<Capacidad> obtenerCapacidadesDelBootcamp(Long bootcampId) {
         return iCapacidadRepository.findAllByBootcampId(bootcampId)
-                .collectList()
-                .flatMap(capacidades ->
-                        // 1. Borrar relación intermedia
-                        iBootcampCapacidadRepository.deleteAllByBootcampId(bootcampId)
-                                // 2. Borrar Bootcamp padre
-                                .then(IBootcampRepository.deleteById(bootcampId))
-                                // 3. CAMBIO: usar concatMap para procesar uno por uno sin solapar conexiones
-                                .thenMany(Flux.fromIterable(capacidades))
-                                .concatMap(this::eliminarCapacidadSiEsHuerfana)
-                                .then()
-                );
+                .map(iCapacidadEntityMapper::toDomainSimple); // Sin tecnologías para ser más rápido
     }
 
-    private Mono<Void> eliminarCapacidadSiEsHuerfana(CapacidadEntity cap) {
-        return iCapacidadRepository.countBootcampsByCapacidadId(cap.getId())
-                .flatMap(count -> {
-                    if (count == 0) {
-                        return iTecnologiaRepository.findAllByCapacidadId(cap.getId())
-                                .collectList()
-                                .flatMap(tecs ->
-                                        icapacidadTecnologiaRepository.deleteAllByCapacidadId(cap.getId())
-                                                .then(iCapacidadRepository.deleteById(cap.getId()))
-                                                // CAMBIO: usar concatMap aquí también
-                                                .thenMany(Flux.fromIterable(tecs))
-                                                .concatMap(this::eliminarTecnologiaSiEsHuerfana)
-                                                .then()
-                                );
-                    }
-                    return Mono.empty();
-                });
-    }
-
-    private Mono<Void> eliminarTecnologiaSiEsHuerfana(TecnologiaEntity tech) {
-        return iTecnologiaRepository.countCapacidadesByTecnologiaId(tech.getId())
-                .flatMap(count -> {
-                    if (count == 0) return iTecnologiaRepository.deleteById(tech.getId());
-                    return Mono.empty();
-                });
-    }
-
-    @Override
     public Mono<Bootcamp> obtenerBootcampPorId(Long id) {
         return IBootcampRepository.findById(id)
                 .map(IBootcampEntityMapper::toDomainSimple);
