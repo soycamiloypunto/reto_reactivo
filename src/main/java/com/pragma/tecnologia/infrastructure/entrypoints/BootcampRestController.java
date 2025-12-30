@@ -36,6 +36,7 @@ public class BootcampRestController {
         return bootcampServicePort.guardarBootcamp(bootcampMapper.toDomain(request));
     }
 
+    //HU5
     @GetMapping
     public Flux<BootcampResponse> listar(
             @RequestParam(defaultValue = "0") int page,

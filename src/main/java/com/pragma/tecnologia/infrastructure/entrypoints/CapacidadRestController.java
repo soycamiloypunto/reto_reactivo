@@ -9,12 +9,12 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import jakarta.validation.Valid;
-import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
+
 
 @RestController
 @RequestMapping("/capacidad")
@@ -28,6 +28,7 @@ public class CapacidadRestController {
         this.capacidadMapper = capacidadMapper;
     }
 
+    //Hu2
     @Operation(summary = "Registrar una nueva Capacidad")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "201", description = "Capacidad creada exitosamente", content = @Content),

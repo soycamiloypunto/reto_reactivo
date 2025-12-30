@@ -55,7 +55,7 @@ public class MatriculaUseCase implements IMatriculaServicePort {
                 .hasElements() // ¿Encontró algún bootcamp que se cruce?
                 .flatMap(seCruza -> {
                     if (seCruza) {
-                        return Mono.error(new DomainException("El estudiante ya está matriculado en este bootcamp"));
+                        return Mono.error(new DomainException("El estudiante ya está matriculado en este bootcamp CORREGIR MENSAJE PARA QUE SEA MMAS ENTENDIBLE"));
                     }
                     return Mono.empty();
                 });

@@ -27,6 +27,7 @@ public class CapacidadUseCase implements ICapacidadServicePort {
                 .then();
     }
 
+    //HU3
     @Override
     public Flux<Capacidad> listarCapacidades(int page, int size, String sortField, String direction) {
         return capacidadPersistencePort.listarCapacidades(page, size, sortField, direction);
